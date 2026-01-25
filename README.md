@@ -126,8 +126,95 @@ An interactive translation script is provided:
 
 translate_cli.py
 
+## Platform Compatibility & Local Execution Notes
+
+### CPU vs GPU Execution
+
+**Part A (Encoder–Decoder, Seq2Seq)**  
+- Runs **fully on CPU** and is compatible with macOS, Linux, and Colab.
+- Produces **strong quantitative metrics** (BLEU / chrF) and **high-quality qualitative translations**.
+- Suitable for **local demos**, quick evaluation, and interviewer walkthroughs.
+
+> **“Part A runs locally on CPU and gives strong BLEU/chrF and good qualitative translations.”**
+
+---
+
+**Part B (Decoder-Only, QLoRA Fine-Tuned)**  
+- Uses **4-bit quantization (QLoRA)** via `bitsandbytes`.
+- Requires **CUDA-enabled GPUs** (Linux / Colab).
+- Not supported on macOS CPU due to:
+  - `bitsandbytes` CUDA dependency
+  - Lack of native 4-bit GPU kernels on macOS
+
+> **“Part B is GPU/4-bit dependent; I added a safe fallback on Mac so the demo doesn’t break.”**
+
+To ensure a smooth demo experience, **Part B gracefully disables itself on unsupported hardware** instead of crashing.
+
+---
+
+## macOS-Specific CLI: `translate_cli_mac.py`
+
+To support local execution on macOS, I created a **platform-aware CLI**:
+
+### Why a Separate macOS CLI?
+- macOS does **not support CUDA** or `bitsandbytes` 4-bit inference.
+- Attempting to load Part B locally would result in runtime failures.
+- `translate_cli_mac.py`:
+  - Loads **Part A only** (CPU-safe)
+  - Clearly informs the user when Part B is unavailable
+  - Ensures the demo remains functional and professional
+
+Example behavior:
+Mode (a/b/q): b
+ Part B not available on this machine (run on Colab/Linux GPU).
+
+markdown
+Copy code
+
+This design avoids confusion and demonstrates **robust engineering practices**.
+
+---
+
+## Minimum Hardware Requirements
+
+### Part A (Local / macOS / CPU)
+- **CPU:** Modern Intel or Apple Silicon (M1/M2)
+- **RAM:** ≥ 8 GB (16 GB recommended)
+- **Disk:** ~2–3 GB (model + tokenizer)
+- **OS:** macOS, Linux, or Windows
+
+### Part B (QLoRA, GPU Required)
+- **GPU:** NVIDIA GPU with CUDA support
+- **VRAM:** ≥ 8 GB (tested on Colab T4 / A100)
+- **OS:** Linux or Colab
+- **Dependencies:** `bitsandbytes`, CUDA-enabled PyTorch
+
+---
+
+## Design Rationale (Interview Summary)
+
+- Implemented **two complementary translation paradigms**:
+  - Stable encoder–decoder baseline (Part A)
+  - Parameter-efficient decoder-only adaptation (Part B)
+- Prioritized:
+  - Reproducibility
+  - Platform safety
+  - Clear failure modes
+- Ensured the project remains **demo-ready on any machine**, even without GPUs.
+
 ### Run:
 ```bash
+For Training:
+
+To train Part a - Encoder-Decoder: python -m src.train_part_a --config configs/part_a.yaml
+To train Part b - Decoder only: python -m src.train_part_b --config configs/part_b.yaml
+
+For Validation: python -m src.run_all \
+  --config_a configs/part_a.yaml \
+  --config_b configs/part_b.yaml \
+  --xlsx_path src/data/Dataset_Challenge_1.xlsx \
+  --run_part_b
+
 python translate_cli.py
 Usage:
 Choose mode:
@@ -167,3 +254,4 @@ Despite this, the pipeline demonstrates:
 - Proper evaluation and analysis
 
 All requirements are fully satisfied.
+
