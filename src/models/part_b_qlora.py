@@ -11,7 +11,11 @@ def load_qlora_model(model_name: str, qlora_cfg: dict, lora_cfg: dict):
     )
 
     tok = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+    
+    # ✅ ADD THIS LINE (decoder-only generation wants left padding)
+    tok.padding_side = "left"
 
+    # ✅ keep this (pad token required for batching)
 
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
