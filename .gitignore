@@ -1,14 +1,75 @@
+# =========================
+# Python
+# =========================
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
-
-.env
 *.log
-/data/*
-/outputs/*
-*.pth
-*.bin
-*.ckpt
+*.tmp
+
+# =========================
+# Jupyter / Colab
+# =========================
+.ipynb_checkpoints/
+*.ipynb
+.DS_Store
+
+# =========================
+# Virtual envs
+# =========================
+venv/
+.env/
+.venv/
+
+# =========================
+# HuggingFace / Transformers
+# =========================
+.cache/
+hf_cache/
 wandb/
+*.bin
+*.safetensors
+*.pt
+*.pth
+
+# =========================
+# PyTorch Lightning
+# =========================
+lightning_logs/
+checkpoints/
+events.out.tfevents.*
+
+# =========================
+# Outputs (models + predictions)
+# =========================
+outputs/
+!outputs/metrics_summary.csv
+!outputs/preds_encoder_decoder_flores.csv
+!outputs/preds_encoder_decoder_xlsx.csv
+!outputs/preds_decoder_only_flores_subset.csv
+!outputs/preds_decoder_only_xlsx.csv
+
+# =========================
+# Large model artifacts
+# =========================
+outputs/**/model*
+outputs/**/checkpoint*
+outputs/**/optimizer*
+outputs/**/scheduler*
+outputs/**/trainer_state*
+outputs/**/scaler*
+outputs/**/rng_state*
+outputs/**/training_args.bin
+
+# =========================
+# Data (local / sensitive)
+# =========================
+data/
+src/data/*.xlsx
+
+# =========================
+# OS / Editor
+# =========================
+.vscode/
+.idea/
