@@ -1,0 +1,26 @@
+seed: 42
+
+model_name: "Helsinki-NLP/opus-mt-en-nl"
+
+# Training data
+train_rows: 30000         # reduce if needed (e.g., 10000)
+val_rows: 2000
+
+# Tokenization
+max_src_len: 128
+max_tgt_len: 128
+
+# Training (Lightning)
+train:
+  epochs: 1
+  lr: 2e-5
+  weight_decay: 0.01
+  warmup_ratio: 0.03
+  train_batch_size: 8
+  val_batch_size: 8
+  precision: "16-mixed"   # use 32 on CPU
+  gradient_clip_val: 1.0
+  log_every_n_steps: 50
+
+# Output
+output_dir: "outputs/part_a_finetuned"
