@@ -106,6 +106,10 @@ def main(config_a: str, config_b: str, xlsx_path: str, run_part_b: bool):
     if run_part_b:
         b_dir = cfg_b["output_dir"]
         b_tok = AutoTokenizer.from_pretrained(b_dir)
+        
+        b_tok.padding_side = "left"
+        if b_tok.pad_token is None:
+            b_tok.pad_token = b_tok.eos_token
         b_model = AutoModelForCausalLM.from_pretrained(b_dir, device_map="auto")
 
         flores_pred_b = generate_decoder_only(b_model, b_tok, flores_src[:500], max_len=cfg_b["max_len"])
