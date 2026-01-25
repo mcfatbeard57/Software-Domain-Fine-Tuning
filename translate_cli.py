@@ -10,7 +10,6 @@ import sys
 import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM
 
-os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 
 def load_part_a(repo_dir: str, rel_dir: str = "outputs/part_a_finetuned"):
     path = os.path.join(repo_dir, rel_dir)
@@ -90,18 +89,7 @@ def translate_part_b(model, tok, text: str, max_len=256, max_new_tokens=128, num
         pad_token_id=tok.pad_token_id,
     )
     decoded = tok.batch_decode(gen, skip_special_tokens=True)[0]
-    # Take only what comes after the FIRST "Dutch:"
-    out = decoded.split("Dutch:", 1)[1] if "Dutch:" in decoded else decoded
-
-    # Stop if the model starts repeating templates again
-    stop_markers = ["\nEnglish:", "\nDutch:", "\nHuman:", "\nAssistant:"]
-    for m in stop_markers:
-        if m in out:
-            out = out.split(m, 1)[0]
-
-    # Keep just the first non-empty line (usually the best translation)
-    lines = [ln.strip() for ln in out.splitlines() if ln.strip()]
-    return lines[0] if lines else out.strip()
+    return decoded.split("Dutch:", 1)[1].strip() if "Dutch:" in decoded else decoded.strip()
 
 
 def main():
