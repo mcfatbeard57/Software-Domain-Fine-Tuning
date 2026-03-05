@@ -42,7 +42,7 @@ outputs/part_a_finetuned/
 ## Part B — Decoder-Only (QLoRA)
 
 ### Model
-- Base: `bigscience/bloom-560m`
+- Base: `bigscience/mlm`
 - Architecture: Decoder-only Transformer
 - Adaptation: **QLoRA (4-bit quantization + LoRA adapters)**
 
