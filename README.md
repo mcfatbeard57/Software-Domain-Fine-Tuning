@@ -5,7 +5,7 @@ This repository implements a **comparative machine translation fine-tuning pipel
 The project evaluates two fundamentally different approaches:
 
 1. **Part A** — Encoder–Decoder fine-tuning (MarianMT)
-2. **Part B** — Decoder-only fine-tuning using **QLoRA** (BLOOM-560M)
+2. **Part B** — Decoder-only fine-tuning using **QLoRA** (helinski/mlm)
 
 The goal is not just performance, but to demonstrate **model choice trade-offs, training efficiency, and real-world constraints**.
 
