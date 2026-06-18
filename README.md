@@ -234,7 +234,7 @@ Receive Dutch translation
 This script is intended for qualitative comparison, not benchmark evaluation.
 
 Output Artifacts
-The following files are generated locally (not pushed to GitHub):
+The following files are generated locally (not push to GitHub):
 
 Copy code
 outputs/
